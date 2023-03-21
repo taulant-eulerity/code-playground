@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const { Readable } = require('stream');
 const { execFile } = require('child_process');
-const AWS = require('aws-sdk');
+//const AWS = require('aws-sdk');
 const { createWriteStream } = require('fs');
 
 
@@ -14,41 +14,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1'
-});
+// AWS.config.update({
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//   region: 'us-east-1'
+// });
 
 
-function sendEmail() {
-  // Create an SES instance
-  const ses = new AWS.SES({ apiVersion: '2010-12-01' });
+// function sendEmail() {
+//   // Create an SES instance
+//   const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
-  // Define the email parameters
-  const emailParams = {
-    Source: 'taulantus@gmail.com',
-    Destination: {
-      ToAddresses: ['taulantus@gmail.com']
-    },
-    Message: {
-      Subject: {
-        Data: 'New Visitor'
-      },
-      Body: {
-        Text: {
-          Data: 'Email body text'
-        },
-        Html: {
-          Data: '<p>Someone visited your app</p>'
-        }
-      }
-    }
-  };
+//   // Define the email parameters
+//   const emailParams = {
+//     Source: 'taulantus@gmail.com',
+//     Destination: {
+//       ToAddresses: ['taulantus@gmail.com']
+//     },
+//     Message: {
+//       Subject: {
+//         Data: 'New Visitor'
+//       },
+//       Body: {
+//         Text: {
+//           Data: 'Email body text'
+//         },
+//         Html: {
+//           Data: '<p>Someone visited your app</p>'
+//         }
+//       }
+//     }
+//   };
 
-  // Send the email
-  return ses.sendEmail(emailParams).promise();
-}
+//   // Send the email
+//   return ses.sendEmail(emailParams).promise();
+// }
 
 
 
@@ -57,7 +57,7 @@ app.get("/", (req, res) => {
 })
 
 app.post('/testCode', async (req, res) => {
-    await sendEmail()
+    // await sendEmail()
   try {
     const { script, functionName } = req.body.data;
 
