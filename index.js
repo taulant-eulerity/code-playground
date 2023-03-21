@@ -62,9 +62,8 @@ async function sendSMS(message) {
   return sns.publish(smsParams).promise();
 }
 
-app.get("/", (req, res) => {
-
-  res.status(200).json("<h1>Success</h1>");
+app.get("/", async (req, res) => {
+  res.status(200).json(response);
 });
 
 app.post("/testCode", async (req, res) => {
