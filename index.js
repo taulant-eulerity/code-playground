@@ -33,7 +33,7 @@ function sendEmail() {
     },
     Message: {
       Subject: {
-        Data: 'Email Subject'
+        Data: 'New Visitor'
       },
       Body: {
         Text: {
