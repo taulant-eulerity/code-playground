@@ -9,7 +9,7 @@ const { execFile } = require('child_process');
 const { createWriteStream } = require('fs');
 
 
-app.use(cors());
+app.use(cors({origin: 'http://code-playground.taulantvokshi.com.s3-website-us-east-1.amazonaws.com/'}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
