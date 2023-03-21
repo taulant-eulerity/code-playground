@@ -56,7 +56,7 @@ async function sendSMS(message) {
 
   const smsParams = {
     Message: `New Visit: ${message}`,
-    PhoneNumber: "+16463316367",
+    PhoneNumber: process.env.PHONE_NUMBER,
   };
 
   return sns.publish(smsParams).promise();
@@ -69,7 +69,7 @@ app.get("/", (req, res) => {
 
 app.post("/testCode", async (req, res) => {
   const results = await getGeolocation(getIP(req));
-  await sendSMS(JSON.stringify(results));
+  if(process.env.DEPLOYED)  await sendSMS(JSON.stringify(results));
   try {
     const { script, functionName } = req.body.data;
 
