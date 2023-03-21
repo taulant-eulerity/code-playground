@@ -7,14 +7,19 @@ const { Readable } = require('stream');
 const { execFile } = require('child_process');
 
 const { createWriteStream } = require('fs');
-const { json } = require('express');
+
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+app.get("/", (req, res) => {
+   res.status(200).json("<h1>Success</h1>")
+})
+
 app.post('/testCode', (req, res) => {
- 
+
   try {
     const { script, functionName } = req.body.data;
 
