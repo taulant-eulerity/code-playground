@@ -14,35 +14,51 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-AWS.config.update({ 
+AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'us-east-1'
 });
-const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 
-const sendSMSNotification = async () => {
-  const params = {
-    Message: 'A user has entered your app.',
-    TopicArn: 'arn:aws:sns:us-east-1:630526490102:code-playground-sms:c328ee9a-4f5d-4f45-b8b3-845ec9f1fe3c',
+
+function sendEmail() {
+  // Create an SES instance
+  const ses = new AWS.SES({ apiVersion: '2010-12-01' });
+
+  // Define the email parameters
+  const emailParams = {
+    Source: 'taulantus@gmail.com',
+    Destination: {
+      ToAddresses: ['taulantus@gmail.com']
+    },
+    Message: {
+      Subject: {
+        Data: 'Email Subject'
+      },
+      Body: {
+        Text: {
+          Data: 'Email body text'
+        },
+        Html: {
+          Data: '<p>Someone visited your app</p>'
+        }
+      }
+    }
   };
 
-  try {
-    const data = await sns.publish(params).promise();
-    console.log(`Message sent: ${data.MessageId}`);
-  } catch (error) {
-    console.error(`Error sending SMS: ${error.message}`);
-  }
-};
+  // Send the email
+  return ses.sendEmail(emailParams).promise();
+}
+
+
 
 app.get("/", (req, res) => {
    res.status(200).json("<h1>Success</h1>")
 })
 
 app.post('/testCode', async (req, res) => {
-
+    await sendEmail()
   try {
-    await sendSMSNotification()
     const { script, functionName } = req.body.data;
 
     const file = createWriteStream('results.js');
