@@ -19,7 +19,6 @@ function getIP(req) {
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
     req.connection.socket.remoteAddress;
-  console.log(clientIpAddress, "Hey");
   return clientIpAddress;
 }
 async function getGeolocation(ipAddress) {
