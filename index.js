@@ -64,7 +64,7 @@ async function sendSMS(message) {
 }
 
 app.get("/", async (req, res) => {
-  res.status(200).json("Hello");
+  res.status(200).json("Hey you");
 });
 app.get("/getLatLong", async (req, res) => {
   const params = req.query
