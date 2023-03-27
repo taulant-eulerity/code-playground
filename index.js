@@ -82,7 +82,8 @@ app.get("/getLatLong", async (req, res) => {
     }
   });
 });
-
+  console.log("hey")
+  
 app.post("/testCode", async (req, res) => {
   const results = await getGeolocation(getIP(req));
   if(process.env.DEPLOYED)  {
