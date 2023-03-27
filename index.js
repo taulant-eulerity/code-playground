@@ -8,6 +8,8 @@ const { execFile } = require("child_process");
 const AWS = require("aws-sdk");
 const { createWriteStream } = require("fs");
 const axios = require("axios");
+const { appendToJsonFile } = require("./utils/storeData");
+const fs = require('fs');
 
 app.use(cors());
 app.use(express.json());
@@ -62,12 +64,31 @@ async function sendSMS(message) {
 }
 
 app.get("/", async (req, res) => {
-  res.status(200).json(response);
+  res.status(200).json("Hello");
+});
+app.get("/getLatLong", async (req, res) => {
+  const params = req.query
+  if(!params?.key || params.key !== process.env.API.KEY) return res.sendStatus(401)
+
+  const filePath = './data.json';
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(`Error reading file from disk: ${err}`);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      const jsonData = JSON.parse(data);
+      res.status(200).json(jsonData);
+    }
+  });
 });
 
 app.post("/testCode", async (req, res) => {
   const results = await getGeolocation(getIP(req));
-  if(process.env.DEPLOYED)  await sendSMS(JSON.stringify(results));
+  if(process.env.DEPLOYED)  {
+    if(results?.lat && results?.lon) appendToJsonFile('./data.json', JSON.stringify({'lat': results.lat, 'lob': results.lat}))
+    await sendSMS(JSON.stringify(results));
+  }
   try {
     const { script, functionName } = req.body.data;
 
